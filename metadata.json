@@ -1,0 +1,7 @@
+{
+  "name": "FX Pro - Modern Forex Trading Terminal Demo",
+  "description": "A professional simulated Forex trading terminal with live tick charts, order execution, real-time dynamic P/L, positions, and analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

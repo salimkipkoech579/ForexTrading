@@ -1,0 +1,1089 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FX Pro - Modern Forex Trading Terminal Demo</title>
+    <meta name="description" content="A professional simulated Forex trading terminal with live tick charts, order execution, real-time dynamic P/L, positions, and analytics." />
+    <meta property="og:title" content="FX Pro - Modern Forex Trading Terminal Demo" />
+    <meta property="og:description" content="A professional simulated Forex trading terminal with live tick charts, order execution, real-time dynamic P/L, positions, and analytics." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono for authentic financial terminal typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <!-- Top Mandatory Safety & Simulation Disclaimer Banner -->
+    <header class="demo-disclaimer-bar">
+      <div class="disclaimer-text">
+        <span class="badge-demo">SIMULATION</span>
+        <strong>DEMO ACCOUNT</strong> &mdash; Simulated prices and trading. No real-money transactions or brokerage connection.
+      </div>
+      <div class="disclaimer-links">
+        <span>Leverage: 1:100 (Demo)</span>
+        <span aria-hidden="true">&bull;</span>
+        <a onclick="openModal('shortcuts-modal')">Keyboard Shortcuts [?]</a>
+        <span aria-hidden="true">&bull;</span>
+        <a onclick="resetDemoAccount()">Reset Simulation</a>
+      </div>
+    </header>
+
+    <!-- Main Terminal App Shell -->
+    <div class="app-container">
+      <!-- 1. SIDEBAR NAVIGATION -->
+      <aside class="sidebar" aria-label="Main Navigation">
+        <div class="sidebar-header">
+          <a href="#" class="brand-lockup" onclick="switchTab('dashboard')">
+            <div class="brand-icon">FX</div>
+            <div class="brand-text">
+              <span class="brand-title">FX PRO</span>
+              <span class="brand-subtitle">Demo Terminal</span>
+            </div>
+          </a>
+          <button class="sidebar-collapse-btn" id="sidebar-collapse-toggle" title="Toggle Sidebar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg>
+          </button>
+        </div>
+
+        <nav class="sidebar-nav">
+          <div class="nav-section-title">Trading Engine</div>
+          
+          <a href="#dashboard" class="nav-item active" data-tab="dashboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            <span class="nav-text">Dashboard</span>
+          </a>
+
+          <a href="#markets" class="nav-item" data-tab="markets">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+            <span class="nav-text">Markets</span>
+            <span class="nav-badge">12</span>
+          </a>
+
+          <a href="#trade" class="nav-item" data-tab="trade">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></svg>
+            <span class="nav-text">Trade</span>
+          </a>
+
+          <a href="#watchlist" class="nav-item" data-tab="watchlist">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            <span class="nav-text">Watchlist</span>
+          </a>
+
+          <div class="nav-section-title">Portfolio & Orders</div>
+
+          <a href="#positions" class="nav-item" data-tab="positions">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m10 15 5-3-5-3v6Z"/></svg>
+            <span class="nav-text">Positions</span>
+            <span class="nav-badge" id="open-pos-count-badge">4</span>
+          </a>
+
+          <a href="#orders" class="nav-item" data-tab="orders">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span class="nav-text">Orders</span>
+          </a>
+
+          <a href="#history" class="nav-item" data-tab="history">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span class="nav-text">Trading History</span>
+          </a>
+
+          <div class="nav-section-title">Research & Tools</div>
+
+          <a href="#analytics" class="nav-item" data-tab="analytics">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <span class="nav-text">Analytics</span>
+          </a>
+
+          <a href="#calendar" class="nav-item" data-tab="calendar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span class="nav-text">Economic Calendar</span>
+          </a>
+
+          <a href="#settings" class="nav-item" data-tab="settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span class="nav-text">Settings</span>
+          </a>
+
+          <a href="#help" class="nav-item" data-tab="help">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span class="nav-text">Help & Support</span>
+          </a>
+        </nav>
+
+        <!-- User Profile Card in Sidebar -->
+        <div class="sidebar-footer">
+          <div class="user-profile-card" onclick="openModal('add-funds-modal')">
+            <img src="/src/assets/images/trader_avatar_1790234638662.jpg" alt="Trader Avatar" class="user-avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div class="user-avatar-fallback" style="display: none;">AM</div>
+            <div class="user-info">
+              <span class="user-name">Alex Morgan</span>
+              <span class="user-id">#FX-884920 &bull; Demo</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 2. MAIN WRAPPER & TOP NAVBAR -->
+      <main class="main-wrapper">
+        <header class="top-navbar">
+          <div class="top-nav-left">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+
+            <!-- Search Markets Input with autocomplete -->
+            <div class="search-box-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input type="text" id="market-search-input" class="search-input" placeholder="Search pairs (e.g., EUR/USD, Gold, JPY)..." autocomplete="off" />
+              <div class="search-results-dropdown" id="search-dropdown"></div>
+            </div>
+
+            <!-- Market Status Badge -->
+            <div class="market-status-badge">
+              <span class="pulse-dot"></span>
+              <span>Market Open (LDN/NYC)</span>
+            </div>
+          </div>
+
+          <div class="top-nav-right">
+            <!-- Demo Account Badge & Quick Balance -->
+            <div class="demo-account-indicator">
+              <span class="demo-badge-pill">DEMO</span>
+              <div class="balance-quick-display">
+                <span class="balance-label">Demo Balance</span>
+                <span class="balance-val" id="top-bar-balance">$25,000.00</span>
+              </div>
+            </div>
+
+            <!-- Deposit button labeled "Add Demo Funds" as requested -->
+            <button class="btn btn-primary" onclick="openModal('add-funds-modal')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <span>Add Demo Funds</span>
+            </button>
+
+            <!-- Sound Toggle -->
+            <button class="btn-icon" id="sound-toggle-btn" title="Toggle Sound FX" onclick="toggleSound()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            </button>
+
+            <!-- Theme Toggle -->
+            <button class="btn-icon" id="theme-toggle-btn" title="Toggle Dark/Light Mode">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2"/><path d="M12 21v2"/><path d="M4.22 4.22l1.42 1.42"/><path d="M18.36 18.36l1.42 1.42"/><path d="M1 12h2"/><path d="M21 12h2"/><path d="M4.22 19.78l1.42-1.42"/><path d="M18.36 5.64l1.42-1.42"/></svg>
+            </button>
+
+            <!-- Notifications Bell & Dropdown -->
+            <div style="position: relative;">
+              <button class="btn-icon" id="notif-bell-btn" title="Notifications">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                <span class="badge-counter">3</span>
+              </button>
+              <div class="notifications-dropdown" id="notif-dropdown">
+                <div class="notif-header">
+                  <span>Simulated Market Alerts</span>
+                  <span style="font-size: 10px; color: var(--text-muted); cursor: pointer;" onclick="document.querySelectorAll('.notif-item').forEach(i => i.classList.remove('unread'))">Mark all read</span>
+                </div>
+                <div class="notif-list">
+                  <div class="notif-item unread">
+                    <span style="color: var(--bull-green); font-size: 14px;">●</span>
+                    <div>
+                      <div style="font-weight: 600;">EUR/USD moved +0.35%</div>
+                      <div style="font-size: 11px; color: var(--text-secondary);">Momentum increase triggered on 15m candle.</div>
+                      <div class="notif-time">Just now</div>
+                    </div>
+                  </div>
+                  <div class="notif-item unread">
+                    <span style="color: #38bdf8; font-size: 14px;">●</span>
+                    <div>
+                      <div style="font-weight: 600;">Demo position reached Take Profit</div>
+                      <div style="font-size: 11px; color: var(--text-secondary);">XAU/USD closed at target with +$855.00 profit.</div>
+                      <div class="notif-time">14m ago</div>
+                    </div>
+                  </div>
+                  <div class="notif-item">
+                    <span style="color: var(--accent-amber); font-size: 14px;">●</span>
+                    <div>
+                      <div style="font-weight: 600;">Market volatility increased</div>
+                      <div style="font-size: 11px; color: var(--text-secondary);">USD/JPY spread adjusted dynamically.</div>
+                      <div class="notif-time">1h ago</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Settings Gear Button -->
+            <button class="btn-icon" title="Terminal Settings" onclick="switchTab('settings')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </button>
+          </div>
+        </header>
+
+        <!-- VIEWPORT CONTAINER (TABS) -->
+        <div class="view-container">
+
+          <!-- ================================================================
+               TAB: DASHBOARD (MAIN TRADING HUB)
+               ================================================================ -->
+          <section id="view-dashboard" class="tab-view active">
+            <!-- REALISTIC STATISTIC CARDS -->
+            <div class="stats-grid">
+              <div class="stat-card stat-primary">
+                <div class="stat-title-row">
+                  <span class="stat-title">Demo Balance</span>
+                  <span style="color: #60a5fa; font-size: 11px;">USD</span>
+                </div>
+                <div class="stat-value" id="stat-demo-balance">$25,000.00</div>
+                <div class="stat-subtext">
+                  <span style="color: var(--text-secondary);">Initial capital</span>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-title-row">
+                  <span class="stat-title">Equity</span>
+                  <span style="color: var(--accent-cyan); font-size: 11px;">Live</span>
+                </div>
+                <div class="stat-value" id="stat-equity">$25,842.50</div>
+                <div class="stat-subtext">
+                  <span>Balance + Unrealized</span>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-title-row">
+                  <span class="stat-title">Available Margin</span>
+                </div>
+                <div class="stat-value" id="stat-avail-margin">$22,450.00</div>
+                <div class="stat-subtext">
+                  <span>Free for new trades</span>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-title-row">
+                  <span class="stat-title">Used Margin</span>
+                </div>
+                <div class="stat-value" id="stat-used-margin">$3,392.50</div>
+                <div class="stat-subtext">
+                  <span>Leverage: 1:100</span>
+                </div>
+              </div>
+
+              <div class="stat-card stat-profit">
+                <div class="stat-title-row">
+                  <span class="stat-title">Today's P/L</span>
+                  <span class="text-bull" style="font-size: 10px; font-weight: 700;">LIVE</span>
+                </div>
+                <div class="stat-value text-bull" id="stat-today-pnl">+$842.50 (+3.37%)</div>
+                <div class="stat-subtext">
+                  <span class="text-bull">&uarr; Unrealized profit</span>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-title-row">
+                  <span class="stat-title">Open Positions</span>
+                </div>
+                <div class="stat-value" id="stat-open-positions">4</div>
+                <div class="stat-subtext">
+                  <span>Active demo orders</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- DASHBOARD GRID: CHART + ORDER PANEL -->
+            <div class="dashboard-grid">
+              <div class="trading-center-col">
+                <!-- LARGE PROFESSIONAL CANDLESTICK CHART -->
+                <div class="terminal-card chart-container-panel">
+                  <div class="chart-toolbar">
+                    <div class="chart-symbol-info">
+                      <button class="pair-select-btn" onclick="openModal('pair-picker-modal')">
+                        <span id="chart-pair-name">EUR/USD</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                      </button>
+                      <div class="chart-live-price" id="chart-current-price">
+                        <span class="text-bull">1.17482</span>
+                      </div>
+                    </div>
+
+                    <div class="chart-timeframes">
+                      <button class="tf-btn" data-tf="1m">1m</button>
+                      <button class="tf-btn" data-tf="5m">5m</button>
+                      <button class="tf-btn active" data-tf="15m">15m</button>
+                      <button class="tf-btn" data-tf="1H">1H</button>
+                      <button class="tf-btn" data-tf="4H">4H</button>
+                      <button class="tf-btn" data-tf="1D">1D</button>
+                    </div>
+
+                    <div class="chart-tools-group">
+                      <button class="btn btn-outline" style="padding: 3px 8px; font-size: 11px;" onclick="toggleChartStyle()" title="Toggle Candle / Area Style">
+                        Candles/Area
+                      </button>
+                      <button class="btn btn-outline" style="padding: 3px 8px; font-size: 11px;" onclick="toggleSMA20()" title="Toggle SMA 20">
+                        SMA 20
+                      </button>
+                      <button class="btn-icon" style="padding: 4px;" onclick="resetChartZoom()" title="Reset Zoom">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Canvas Chart Viewport -->
+                  <div class="chart-canvas-wrapper">
+                    <!-- HUD / OHLC values -->
+                    <div class="chart-overlay-stats" id="chart-hud-stats">
+                      <span>O: 1.17420</span> <span>H: 1.17510</span> <span>L: 1.17390</span> <span>C: 1.17482</span>
+                    </div>
+
+                    <!-- Quick Buy / Sell Buttons Overlay -->
+                    <div class="chart-quick-trade-bar">
+                      <button class="quick-trade-btn quick-sell-btn" id="quick-sell-btn">
+                        <span>SELL</span>
+                        <span id="quick-sell-price">1.17475</span>
+                      </button>
+                      <button class="quick-trade-btn quick-buy-btn" id="quick-buy-btn">
+                        <span>BUY</span>
+                        <span id="quick-buy-price">1.17489</span>
+                      </button>
+                    </div>
+
+                    <!-- Main HTML5 Canvas -->
+                    <canvas id="trading-chart"></canvas>
+
+                    <!-- Interactive Dynamic Crosshair Badges -->
+                    <div class="chart-crosshair-badge-price" id="chart-crosshair-price">1.17482</div>
+                    <div class="chart-crosshair-badge-time" id="chart-crosshair-time">14:30:00</div>
+                  </div>
+                </div>
+
+                <!-- OPEN POSITIONS TABLE (IN DASHBOARD) -->
+                <div class="terminal-card">
+                  <div class="card-header">
+                    <div class="card-title-group">
+                      <span class="card-title">Open Positions</span>
+                      <span style="font-size: 11px; color: var(--text-muted);">Real-time P/L simulation</span>
+                    </div>
+                    <div class="card-actions">
+                      <button class="btn btn-outline" style="padding: 4px 10px; font-size: 11px;" onclick="closeAllPositions()">Close All</button>
+                      <button class="btn btn-outline" style="padding: 4px 10px; font-size: 11px;" onclick="switchTab('positions')">View Detailed</button>
+                    </div>
+                  </div>
+                  <div class="table-responsive">
+                    <table class="trading-table">
+                      <thead>
+                        <tr>
+                          <th>Pair</th>
+                          <th>Type</th>
+                          <th>Size</th>
+                          <th>Entry</th>
+                          <th>Current</th>
+                          <th>SL</th>
+                          <th>TP</th>
+                          <th>P/L ($)</th>
+                          <th class="text-right">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody id="open-positions-tbody">
+                        <!-- Rendered by JS -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ORDER EXECUTION PANEL -->
+              <div class="order-panel">
+                <div class="card-title-group" style="justify-content: space-between; border-bottom: 1px solid var(--border-subtle); padding-bottom: 8px;">
+                  <span class="card-title">Order Entry</span>
+                  <span style="font-size: 11px; color: var(--accent-cyan); font-weight: 600;">Demo Execution</span>
+                </div>
+
+                <!-- Order Type Tabs: Market, Limit, Stop -->
+                <div class="order-type-tabs">
+                  <button class="order-type-tab active" data-type="MARKET">Market</button>
+                  <button class="order-type-tab" data-type="LIMIT">Limit</button>
+                  <button class="order-type-tab" data-type="STOP">Stop</button>
+                </div>
+
+                <!-- Lot Size Input -->
+                <div class="form-group">
+                  <div class="form-label-row">
+                    <span class="form-label">Volume (Lots)</span>
+                    <span style="font-size: 10px; color: var(--text-muted);">1 Lot = 100,000 units</span>
+                  </div>
+                  <input type="number" id="order-lot-size" class="form-input" value="0.50" step="0.01" min="0.01" max="100" />
+                  <div class="input-steppers">
+                    <span class="stepper-chip" data-lot="0.01">0.01</span>
+                    <span class="stepper-chip" data-lot="0.10">0.10</span>
+                    <span class="stepper-chip" data-lot="0.50">0.50</span>
+                    <span class="stepper-chip" data-lot="1.00">1.00</span>
+                    <span class="stepper-chip" data-lot="5.00">5.00</span>
+                  </div>
+                </div>
+
+                <!-- Entry Price (hidden for Market, visible for Limit/Stop) -->
+                <div class="form-group" id="order-entry-group" style="display: none;">
+                  <div class="form-label-row">
+                    <span class="form-label">Order Price</span>
+                  </div>
+                  <input type="number" id="order-entry-price" class="form-input" placeholder="Desired entry price" step="0.0001" />
+                </div>
+
+                <!-- Stop Loss & Take Profit Inputs -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                  <div class="form-group">
+                    <div class="form-label-row">
+                      <span class="form-label">Stop Loss</span>
+                    </div>
+                    <input type="number" id="order-stop-loss" class="form-input" placeholder="SL price" step="0.0001" />
+                  </div>
+                  <div class="form-group">
+                    <div class="form-label-row">
+                      <span class="form-label">Take Profit</span>
+                    </div>
+                    <input type="number" id="order-take-profit" class="form-input" placeholder="TP price" step="0.0001" />
+                  </div>
+                </div>
+
+                <!-- Dynamic Metrics Box: Risk/Reward, Est Margin, Pip Value -->
+                <div class="order-metrics-box">
+                  <div class="metric-row">
+                    <span>Risk / Reward Ratio</span>
+                    <span id="order-est-rr">1 : 2.0 (Est)</span>
+                  </div>
+                  <div class="metric-row">
+                    <span>Estimated Margin</span>
+                    <span id="order-est-margin">$587.41</span>
+                  </div>
+                  <div class="metric-row">
+                    <span>Pip Value</span>
+                    <span id="order-pip-val">$5.00</span>
+                  </div>
+                </div>
+
+                <!-- BUY / LONG & SELL / SHORT BUTTONS -->
+                <div class="order-action-buttons">
+                  <button class="trade-btn trade-btn-sell" id="order-sell-btn">
+                    <span class="trade-btn-action">SELL / SHORT</span>
+                    <span class="trade-btn-price" id="sell-btn-price">1.17475</span>
+                  </button>
+                  <button class="trade-btn trade-btn-buy" id="order-buy-btn">
+                    <span class="trade-btn-action">BUY / LONG</span>
+                    <span class="trade-btn-price" id="buy-btn-price">1.17489</span>
+                  </button>
+                </div>
+
+                <div style="font-size: 10px; color: var(--text-dim); text-align: center; margin-top: 4px;">
+                  Instant demo order execution. Confirmation dialog will appear.
+                </div>
+              </div>
+            </div>
+
+            <!-- FOREX MARKET WATCH TABLE (DASHBOARD COMPONENT) -->
+            <div class="terminal-card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <span class="card-title">Forex Market Watch</span>
+                  <span style="font-size: 11px; color: var(--text-muted);">&bull; Continuous simulated ticks</span>
+                </div>
+                <div class="card-actions">
+                  <button class="btn btn-outline" style="padding: 4px 10px; font-size: 11px;" onclick="switchTab('markets')">All Markets</button>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="trading-table">
+                  <thead>
+                    <tr>
+                      <th>Symbol</th>
+                      <th>Bid</th>
+                      <th>Ask</th>
+                      <th class="text-center">Spread</th>
+                      <th class="text-right">Change</th>
+                      <th class="text-center">Chart</th>
+                      <th class="text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="market-table-body">
+                    <!-- Dynamic live ticking rows rendered via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================================================================
+               TAB: MARKETS (FULL MARKET DIRECTORY)
+               ================================================================ -->
+          <section id="view-markets" class="tab-view">
+            <div class="terminal-card">
+              <div class="market-filter-bar">
+                <button class="filter-tab-btn active" onclick="document.querySelectorAll('.filter-tab-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active'); renderMarketTable('full-market-tbody', 'all');">All Instruments</button>
+                <button class="filter-tab-btn" onclick="document.querySelectorAll('.filter-tab-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active'); renderMarketTable('full-market-tbody', 'majors');">Majors</button>
+                <button class="filter-tab-btn" onclick="document.querySelectorAll('.filter-tab-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active'); renderMarketTable('full-market-tbody', 'minors');">Minors</button>
+                <button class="filter-tab-btn" onclick="document.querySelectorAll('.filter-tab-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active'); renderMarketTable('full-market-tbody', 'metals');">Metals (Gold)</button>
+                <button class="filter-tab-btn" onclick="document.querySelectorAll('.filter-tab-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active'); renderMarketTable('full-market-tbody', 'crypto');">Crypto (BTC)</button>
+              </div>
+              <div class="table-responsive">
+                <table class="trading-table">
+                  <thead>
+                    <tr>
+                      <th>Symbol</th>
+                      <th>Bid</th>
+                      <th>Ask</th>
+                      <th class="text-center">Spread (Pips)</th>
+                      <th class="text-right">24h Change</th>
+                      <th class="text-center">Trend Sparkline</th>
+                      <th class="text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="full-market-tbody">
+                    <!-- Populated via script -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================================================================
+               TAB: TRADE (DEEP TRADING WORKSTATION)
+               ================================================================ -->
+          <section id="view-trade" class="tab-view">
+            <div class="terminal-card" style="padding: 16px;">
+              <div class="card-title-group" style="justify-content: space-between; margin-bottom: 12px;">
+                <div>
+                  <h2 style="font-size: 16px; font-weight: 800;">Dedicated Trading Workstation</h2>
+                  <p style="font-size: 12px; color: var(--text-muted);">High-speed tick chart and direct order entry</p>
+                </div>
+                <button class="btn btn-primary" onclick="switchTab('dashboard')">Back to Overview</button>
+              </div>
+              <p style="color: var(--text-secondary); margin-bottom: 12px;">
+                Tip: Press <kbd style="background: var(--bg-tertiary); padding: 2px 6px; border-radius: 4px; font-family: var(--font-mono); border: 1px solid var(--border-strong);">B</kbd> to quick-buy or <kbd style="background: var(--bg-tertiary); padding: 2px 6px; border-radius: 4px; font-family: var(--font-mono); border: 1px solid var(--border-strong);">S</kbd> to quick-sell any currently selected pair.
+              </p>
+            </div>
+          </section>
+
+          <!-- ================================================================
+               TAB: WATCHLIST
+               ================================================================ -->
+          <section id="view-watchlist" class="tab-view">
+            <div class="terminal-card" style="padding: 14px;">
+              <div class="card-header" style="padding: 0 0 12px 0;">
+                <div class="card-title-group">
+                  <span class="card-title">Custom Watchlist</span>
+                  <span style="font-size: 11px; color: var(--text-muted);">Quick-click to load any pair into the terminal chart</span>
+                </div>
+                <button class="btn btn-outline" onclick="openModal('add-watchlist-modal')">+ Add Symbol</button>
+              </div>
+
+              <div class="stats-grid" id="watchlist-items-container" style="margin-top: 12px;">
+                <!-- Populated via script -->
+              </div>
+            </div>
+          </section>
+
+          <!-- ================================================================
+               TAB: POSITIONS
+               ================================================================ -->
+          <section id="view-positions" class="tab-view">
+            <div class="terminal-card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <span class="card-title">Open Positions Management</span>
+                  <span style="font-size: 11px; color: var(--text-muted);">Live floating profit & loss</span>
+                </div>
+                <button class="btn btn-danger" onclick="closeAllPositions()">Close All Positions</button>
+              </div>
+              <div class="table-responsive">
+                <table class="trading-table">
+                  <thead>
+                    <tr>
+                      <th>Pair</th>
+                      <th>Type</th>
+                      <th>Size</th>
+                      <th>Entry</th>
+                      <th>Current</th>
+                      <th>SL</th>
+                      <th>TP</th>
+                      <th>Floating P/L</th>
+                      <th class="text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="positions-view-tbody">
+                    <!-- Populated via script -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================================================================
+               TAB: ORDERS (PENDING LIMIT & STOP)
+               ================================================================ -->
+          <section id="view-orders" class="tab-view">
+            <div class="terminal-card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <span class="card-title">Pending Orders</span>
+                  <span style="font-size: 11px; color: var(--text-muted);">Limit & Stop orders waiting for market trigger</span>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="trading-table">
+                  <thead>
+                    <tr>
+                      <th>Pair</th>
+                      <th>Type</th>
+                      <th>Size</th>
+                      <th>Target Price</th>
+                      <th>SL</th>
+                      <th>TP</th>
+                      <th>Status</th>
+                      <th class="text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="orders-view-tbody">
+                    <!-- Populated via script -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================================================================
+               TAB: TRADING HISTORY
+               ================================================================ -->
+          <section id="view-history" class="tab-view">
+            <div class="terminal-card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <span class="card-title">Closed Trades History</span>
+                  <span style="font-size: 11px; color: var(--text-muted);">Simulated transaction record</span>
+                </div>
+                <div class="card-actions">
+                  <button class="btn btn-outline" style="padding: 4px 10px; font-size: 11px;" onclick="renderHistoryTable('all')">All</button>
+                  <button class="btn btn-outline" style="padding: 4px 10px; font-size: 11px; color: var(--bull-green);" onclick="renderHistoryTable('profitable')">Profitable Only</button>
+                  <button class="btn btn-outline" style="padding: 4px 10px; font-size: 11px; color: var(--bear-red);" onclick="renderHistoryTable('losing')">Losing Only</button>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="trading-table">
+                  <thead>
+                    <tr>
+                      <th>Closed Date</th>
+                      <th>Pair</th>
+                      <th>Type</th>
+                      <th>Size</th>
+                      <th>Entry</th>
+                      <th>Exit</th>
+                      <th>P/L ($)</th>
+                      <th>Return (%)</th>
+                      <th>Reason</th>
+                    </tr>
+                  </thead>
+                  <tbody id="history-table-tbody">
+                    <!-- Populated via script -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================================================================
+               TAB: ANALYTICS
+               ================================================================ -->
+          <section id="view-analytics" class="tab-view">
+            <div class="analytics-grid">
+              <div class="analytics-chart-box">
+                <div class="card-title-group" style="justify-content: space-between;">
+                  <span class="card-title">Demo Account Equity Growth Curve</span>
+                  <span style="font-size: 11px; color: var(--accent-cyan); font-family: var(--font-mono);">Baseline $25,000.00</span>
+                </div>
+                <div style="height: 240px; width: 100%; position: relative;">
+                  <canvas id="analytics-equity-canvas" style="width: 100%; height: 100%;"></canvas>
+                </div>
+
+                <div class="card-title-group" style="justify-content: space-between; margin-top: 10px;">
+                  <span class="card-title">Daily P/L Distribution (Last 10 Trades)</span>
+                </div>
+                <div style="height: 120px; width: 100%; position: relative;">
+                  <canvas id="analytics-pnl-canvas" style="width: 100%; height: 100%;"></canvas>
+                </div>
+              </div>
+
+              <!-- Key Analytics Metrics -->
+              <div class="terminal-card" style="padding: 16px;">
+                <span class="card-title" style="margin-bottom: 12px;">Performance Metrics</span>
+                <div class="analytics-metrics-grid">
+                  <div class="analytics-metric-tile">
+                    <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Win Rate</span>
+                    <span class="stat-value text-bull" id="metric-win-rate">66.7%</span>
+                  </div>
+                  <div class="analytics-metric-tile">
+                    <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Total Trades</span>
+                    <span class="stat-value" id="metric-total-trades">5</span>
+                  </div>
+                  <div class="analytics-metric-tile">
+                    <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Profit Factor</span>
+                    <span class="stat-value" id="metric-profit-factor">1.82</span>
+                  </div>
+                  <div class="analytics-metric-tile">
+                    <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Avg Profit</span>
+                    <span class="stat-value text-bull" id="metric-avg-profit">+$430.67</span>
+                  </div>
+                  <div class="analytics-metric-tile">
+                    <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Avg Loss</span>
+                    <span class="stat-value text-bear" id="metric-avg-loss">-$126.00</span>
+                  </div>
+                  <div class="analytics-metric-tile">
+                    <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Risk / Reward</span>
+                    <span class="stat-value" id="metric-risk-reward">1 : 3.42</span>
+                  </div>
+                </div>
+                <div style="font-size: 11px; color: var(--text-dim); margin-top: 14px; line-height: 1.5;">
+                  Calculated automatically from your simulated closed trades stored in local browser memory.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================================================================
+               TAB: ECONOMIC CALENDAR
+               ================================================================ -->
+          <section id="view-calendar" class="tab-view">
+            <div class="terminal-card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <span class="card-title">Economic Calendar (Simulated Data)</span>
+                  <span style="font-size: 11px; color: var(--accent-amber);">&bull; Demo Macro Events</span>
+                </div>
+                <div class="card-actions">
+                  <button class="btn btn-outline" style="padding: 4px 10px; font-size: 11px;" onclick="renderEconomicCalendar('all')">All Events</button>
+                  <button class="btn btn-outline" style="padding: 4px 10px; font-size: 11px; color: var(--bear-red);" onclick="renderEconomicCalendar('high')">High Impact Only</button>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="trading-table">
+                  <thead>
+                    <tr>
+                      <th>Time (GMT)</th>
+                      <th>Currency</th>
+                      <th>Event</th>
+                      <th>Impact</th>
+                      <th class="text-right">Previous</th>
+                      <th class="text-right">Forecast</th>
+                      <th class="text-right">Actual</th>
+                    </tr>
+                  </thead>
+                  <tbody id="calendar-tbody">
+                    <!-- Populated via script -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================================================================
+               TAB: SETTINGS
+               ================================================================ -->
+          <section id="view-settings" class="tab-view">
+            <div class="terminal-card" style="max-width: 600px; padding: 20px;">
+              <h2 style="font-size: 16px; font-weight: 800; margin-bottom: 16px;">Simulation Settings</h2>
+              
+              <div class="form-group" style="margin-bottom: 16px;">
+                <label class="form-label" style="margin-bottom: 6px;">Demo Account Leverage</label>
+                <select class="form-input" onchange="setDemoLeverage(this.value)">
+                  <option value="30">1:30 (Retail Standard)</option>
+                  <option value="50">1:50</option>
+                  <option value="100" selected>1:100 (Default Demo)</option>
+                  <option value="500">1:500 (High Leverage Demo)</option>
+                </select>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 16px;">
+                <label class="form-label" style="margin-bottom: 6px;">Interface Theme</label>
+                <div style="display: flex; gap: 10px;">
+                  <button class="btn btn-primary" onclick="document.body.classList.remove('light-theme'); showToast('Dark Theme active');">Dark Terminal</button>
+                  <button class="btn btn-outline" onclick="document.body.classList.add('light-theme'); showToast('Light Theme active');">Light Terminal</button>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 20px;">
+                <label class="form-label" style="margin-bottom: 6px;">Reset Demo Capital</label>
+                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Reverts demo balance to $25,000.00 and restores default sample trades.</p>
+                <button class="btn btn-danger" onclick="resetDemoAccount()">Reset Simulation State</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================================================================
+               TAB: HELP & SUPPORT
+               ================================================================ -->
+          <section id="view-help" class="tab-view">
+            <div class="terminal-card" style="padding: 20px; max-width: 800px;">
+              <h2 style="font-size: 16px; font-weight: 800; margin-bottom: 8px;">Forex Trading Simulator Guide</h2>
+              <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                This platform is an educational simulation designed to practice currency trading mechanics without financial risk.
+              </p>
+
+              <div style="display: flex; flex-direction: column; gap: 14px;">
+                <div style="background: var(--bg-primary); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                  <h4 style="font-size: 13px; font-weight: 700; color: #38bdf8; margin-bottom: 4px;">What is a Pip?</h4>
+                  <p style="font-size: 12px; color: var(--text-muted);">
+                    A pip (Percentage in Point) is the smallest standardized unit of price movement for currencies (usually 0.0001 for EUR/USD, 0.01 for USD/JPY).
+                  </p>
+                </div>
+
+                <div style="background: var(--bg-primary); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                  <h4 style="font-size: 13px; font-weight: 700; color: #38bdf8; margin-bottom: 4px;">Lot Sizes & Leverage</h4>
+                  <p style="font-size: 12px; color: var(--text-muted);">
+                    1 standard lot equals 100,000 units of currency. Leverage (e.g. 1:100) allows you to control a position with only 1% initial margin deposit.
+                  </p>
+                </div>
+
+                <div style="background: var(--bg-primary); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                  <h4 style="font-size: 13px; font-weight: 700; color: #38bdf8; margin-bottom: 4px;">Keyboard Shortcuts</h4>
+                  <p style="font-size: 12px; color: var(--text-muted);">
+                    Press <kbd>B</kbd> to open a BUY order, <kbd>S</kbd> to open a SELL order, and <kbd>Esc</kbd> to dismiss any dialog.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </main>
+    </div>
+
+    <!-- ====================================================================
+         MOBILE BOTTOM NAVIGATION
+         ==================================================================== -->
+    <nav class="mobile-bottom-nav">
+      <button class="mobile-nav-btn active" data-tab="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+        <span>Overview</span>
+      </button>
+      <button class="mobile-nav-btn" data-tab="markets">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+        <span>Markets</span>
+      </button>
+      <button class="mobile-nav-btn" data-tab="positions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m10 15 5-3-5-3v6Z"/></svg>
+        <span>Positions</span>
+      </button>
+      <button class="mobile-nav-btn" data-tab="analytics">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span>Analytics</span>
+      </button>
+    </nav>
+
+    <!-- ====================================================================
+         MODALS
+         ==================================================================== -->
+    <!-- 1. Order Confirmation Modal -->
+    <div class="modal-overlay" id="order-confirm-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-title">Confirm Simulated Order</span>
+          <button class="btn-icon" onclick="closeModal('order-confirm-modal')">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="order-metrics-box">
+            <div class="metric-row"><span>Symbol</span><span id="confirm-pair">EUR/USD</span></div>
+            <div class="metric-row"><span>Action / Type</span><span id="confirm-action" class="text-bull font-bold">BUY / MARKET</span></div>
+            <div class="metric-row"><span>Volume</span><span id="confirm-lots">0.50 Lots</span></div>
+            <div class="metric-row"><span>Target Price</span><span id="confirm-price">1.17482</span></div>
+            <div class="metric-row"><span>Stop Loss</span><span id="confirm-sl">1.16900</span></div>
+            <div class="metric-row"><span>Take Profit</span><span id="confirm-tp">1.18000</span></div>
+            <div class="metric-row"><span>Estimated Margin</span><span id="confirm-margin">$587.41</span></div>
+          </div>
+          <div style="font-size: 11px; color: #94a3b8; line-height: 1.4;">
+            This simulated trade will execute immediately against demo liquidity without real money risk.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="closeModal('order-confirm-modal')">Cancel</button>
+          <button class="btn btn-primary" onclick="executeConfirmedOrder()">Execute Simulated Order</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Modify SL / TP Modal -->
+    <div class="modal-overlay" id="modify-sltp-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-title">Modify Stop Loss / Take Profit</span>
+          <button class="btn-icon" onclick="closeModal('modify-sltp-modal')">✕</button>
+        </div>
+        <div class="modal-body">
+          <div style="font-size: 12px; color: var(--accent-cyan); font-weight: 600;" id="modify-pos-info">EUR/USD BUY 0.50 Lots</div>
+          
+          <div class="form-group">
+            <label class="form-label">Stop Loss Price</label>
+            <input type="number" id="modify-sl-input" class="form-input" placeholder="Leave empty for none" step="0.0001" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Take Profit Price</label>
+            <input type="number" id="modify-tp-input" class="form-input" placeholder="Leave empty for none" step="0.0001" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="closeModal('modify-sltp-modal')">Cancel</button>
+          <button class="btn btn-primary" onclick="saveModifiedSLTP()">Save Changes</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Add Demo Funds Modal -->
+    <div class="modal-overlay" id="add-funds-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-title">Add Demo Trading Funds</span>
+          <button class="btn-icon" onclick="closeModal('add-funds-modal')">✕</button>
+        </div>
+        <div class="modal-body">
+          <p style="font-size: 12px; color: var(--text-secondary);">
+            Replenish your demo account balance. All demo credits are virtual and completely free of charge.
+          </p>
+          <div class="deposit-presets-grid">
+            <div class="deposit-preset-btn" onclick="addDemoFunds(5000)">+$5,000</div>
+            <div class="deposit-preset-btn" onclick="addDemoFunds(10000)">+$10,000</div>
+            <div class="deposit-preset-btn" onclick="addDemoFunds(25000)">+$25,000</div>
+            <div class="deposit-preset-btn" onclick="addDemoFunds(50000)">+$50,000</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="closeModal('add-funds-modal')">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Keyboard Shortcuts Modal -->
+    <div class="modal-overlay" id="shortcuts-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-title">Keyboard Shortcuts</span>
+          <button class="btn-icon" onclick="closeModal('shortcuts-modal')">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="order-metrics-box">
+            <div class="metric-row"><span>B</span><span>Quick Buy (Long)</span></div>
+            <div class="metric-row"><span>S</span><span>Quick Sell (Short)</span></div>
+            <div class="metric-row"><span>Esc</span><span>Dismiss Active Dialog</span></div>
+            <div class="metric-row"><span>? or K</span><span>Show Shortcuts</span></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" onclick="closeModal('shortcuts-modal')">Got it</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Add Pair to Watchlist Modal -->
+    <div class="modal-overlay" id="add-watchlist-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-title">Add Pair to Watchlist</span>
+          <button class="btn-icon" onclick="closeModal('add-watchlist-modal')">✕</button>
+        </div>
+        <div class="modal-body">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button class="btn btn-outline" style="justify-content: space-between;" onclick="addPairToWatchlist('EUR/JPY'); closeModal('add-watchlist-modal');">
+              <span>EUR/JPY (Euro / Japanese Yen)</span>
+              <span class="text-bull">+ Add</span>
+            </button>
+            <button class="btn btn-outline" style="justify-content: space-between;" onclick="addPairToWatchlist('GBP/JPY'); closeModal('add-watchlist-modal');">
+              <span>GBP/JPY (British Pound / Yen)</span>
+              <span class="text-bull">+ Add</span>
+            </button>
+            <button class="btn btn-outline" style="justify-content: space-between;" onclick="addPairToWatchlist('BTC/USD'); closeModal('add-watchlist-modal');">
+              <span>BTC/USD (Bitcoin Spot)</span>
+              <span class="text-bull">+ Add</span>
+            </button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="closeModal('add-watchlist-modal')">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Select Pair Modal -->
+    <div class="modal-overlay" id="pair-picker-modal">
+      <div class="modal-content" style="max-width: 520px;">
+        <div class="modal-header">
+          <span class="modal-title">Select Currency Pair</span>
+          <button class="btn-icon" onclick="closeModal('pair-picker-modal')">✕</button>
+        </div>
+        <div class="modal-body" style="max-height: 380px; overflow-y: auto;">
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+            <button class="btn btn-outline" style="justify-content: space-between; padding: 10px;" onclick="selectPair('EUR/USD'); closeModal('pair-picker-modal');">
+              <span style="font-weight: 700;">EUR/USD</span>
+              <span style="font-size: 11px; color: var(--text-muted);">Major</span>
+            </button>
+            <button class="btn btn-outline" style="justify-content: space-between; padding: 10px;" onclick="selectPair('GBP/USD'); closeModal('pair-picker-modal');">
+              <span style="font-weight: 700;">GBP/USD</span>
+              <span style="font-size: 11px; color: var(--text-muted);">Major</span>
+            </button>
+            <button class="btn btn-outline" style="justify-content: space-between; padding: 10px;" onclick="selectPair('USD/JPY'); closeModal('pair-picker-modal');">
+              <span style="font-weight: 700;">USD/JPY</span>
+              <span style="font-size: 11px; color: var(--text-muted);">Major</span>
+            </button>
+            <button class="btn btn-outline" style="justify-content: space-between; padding: 10px;" onclick="selectPair('USD/CHF'); closeModal('pair-picker-modal');">
+              <span style="font-weight: 700;">USD/CHF</span>
+              <span style="font-size: 11px; color: var(--text-muted);">Major</span>
+            </button>
+            <button class="btn btn-outline" style="justify-content: space-between; padding: 10px;" onclick="selectPair('AUD/USD'); closeModal('pair-picker-modal');">
+              <span style="font-weight: 700;">AUD/USD</span>
+              <span style="font-size: 11px; color: var(--text-muted);">Major</span>
+            </button>
+            <button class="btn btn-outline" style="justify-content: space-between; padding: 10px;" onclick="selectPair('USD/CAD'); closeModal('pair-picker-modal');">
+              <span style="font-weight: 700;">USD/CAD</span>
+              <span style="font-size: 11px; color: var(--text-muted);">Major</span>
+            </button>
+            <button class="btn btn-outline" style="justify-content: space-between; padding: 10px;" onclick="selectPair('NZD/USD'); closeModal('pair-picker-modal');">
+              <span style="font-weight: 700;">NZD/USD</span>
+              <span style="font-size: 11px; color: var(--text-muted);">Major</span>
+            </button>
+            <button class="btn btn-outline" style="justify-content: space-between; padding: 10px;" onclick="selectPair('EUR/GBP'); closeModal('pair-picker-modal');">
+              <span style="font-weight: 700;">EUR/GBP</span>
+              <span style="font-size: 11px; color: var(--text-muted);">Cross</span>
+            </button>
+            <button class="btn btn-outline" style="justify-content: space-between; padding: 10px;" onclick="selectPair('XAU/USD'); closeModal('pair-picker-modal');">
+              <span style="font-weight: 700; color: #f59e0b;">XAU/USD (Gold)</span>
+              <span style="font-size: 11px; color: var(--text-muted);">Metal</span>
+            </button>
+            <button class="btn btn-outline" style="justify-content: space-between; padding: 10px;" onclick="selectPair('EUR/JPY'); closeModal('pair-picker-modal');">
+              <span style="font-weight: 700;">EUR/JPY</span>
+              <span style="font-size: 11px; color: var(--text-muted);">Cross</span>
+            </button>
+            <button class="btn btn-outline" style="justify-content: space-between; padding: 10px;" onclick="selectPair('GBP/JPY'); closeModal('pair-picker-modal');">
+              <span style="font-weight: 700;">GBP/JPY</span>
+              <span style="font-size: 11px; color: var(--text-muted);">Cross</span>
+            </button>
+            <button class="btn btn-outline" style="justify-content: space-between; padding: 10px;" onclick="selectPair('BTC/USD'); closeModal('pair-picker-modal');">
+              <span style="font-weight: 700; color: #f59e0b;">BTC/USD</span>
+              <span style="font-size: 11px; color: var(--text-muted);">Crypto</span>
+            </button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="closeModal('pair-picker-modal')">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Vanilla JavaScript Application Engine -->
+    <script src="/script.js"></script>
+  </body>
+</html>
